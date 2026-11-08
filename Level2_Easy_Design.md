@@ -1,4 +1,5 @@
-# Wattching: Level 2 ("The Two Minutes", working title)
+
+# Wattching: Level 2 
 
 Companion to the "Level 2 map" board on the concept art canvas; the numbers 1-5 match the map. It builds on `Wattching_Level1_Design.md`. "Two Minutes Hate" is a term from the novel, so the rights check from the formal elements file still applies.
 
@@ -43,6 +44,7 @@ When the last roar ends, the screen holds a closing slogan and its beam **locks 
 - **When the window ends,** the beam resumes its sweep, exactly as in Level 1.
 
 ## 5. Flow (about 8 minutes, placeholder)
+<img width="3000" height="1520" alt="Level 2 map@2x" src="https://github.com/user-attachments/assets/8c2ed691-61f4-4e4a-b101-76369f6e8ad8" />  
 
 | Beat | Player does | What it teaches |
 |---|---|---|
