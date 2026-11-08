@@ -1,4 +1,5 @@
-# Wattching: Level 4 ("The Roll Call", working title)
+# Wattching: Level 4
+
 
 Companion to the "Level 4 map" board on the concept art canvas; the numbers 1-8 match the map. It builds on Levels 1-3. Every number is a placeholder. Nothing has been playtested, and the screen coverage on the map is a schematic, not a verified geometry.
 
@@ -33,6 +34,7 @@ This is the readable version of the "being away from your place raises suspicion
 - **Two shelter pillars** on the east side, so the lane is crossed in two hops of about 1.5-2 s, each fitting the 2 s gap.
 
 ## 4. Flow (about 12 minutes, placeholder)
+<img width="3000" height="1520" alt="Level 4 map@2x" src="https://github.com/user-attachments/assets/8e79f231-6145-4f3f-8c7d-a2d44b17268a" />  
 
 | Beat | Player does | What it teaches |
 |---|---|---|
