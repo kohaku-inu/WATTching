@@ -1,4 +1,5 @@
-# Wattching: Level 3 ("The Inspector", working title)
+# Wattching: Level 3
+
 
 Companion to the "Level 3 map" board on the concept art canvas; the numbers 1-6 match the map. It builds on `Wattching_Level1_Design.md` and `Wattching_Level2_Design.md`. Every number below is a placeholder. None has been playtested, and the map has not been run in an engine.
 
@@ -54,6 +55,7 @@ The margin shrinks from generous to tight, the number of things to track grows f
 - **Why a smaller cap:** in Level 2 a perfect mask made the whole walk free. Here it should not, because the inspector is still out there.
 
 ## 5. Flow (about 10 minutes, placeholder)
+<img width="3000" height="1520" alt="Level 3 map@2x" src="https://github.com/user-attachments/assets/f58d1801-42fa-4465-87fe-73de86a6a136" />  
 
 | Beat | Player does | What it teaches |
 |---|---|---|
