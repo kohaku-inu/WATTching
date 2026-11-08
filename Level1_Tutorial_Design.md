@@ -1,3 +1,4 @@
+
 # Wattching: Tutorial Level
 
 Companion to the "Tutorial map" board on the concept art canvas; The speed and px distancee calculation and phrasing were with assistance of Claude 4.23118.0.
@@ -27,6 +28,7 @@ A tutorial should ask for one new idea at a time. This level teaches two verbs, 
 6. **Every instruction is taught by the space:** the safe strip, the shelter and the door are placed so the correct path is also the visible one.
 
 ## 3. Flow (about 6 minutes, placeholder)
+<img width="3000" height="1516" alt="Tutorial map@2x" src="https://github.com/user-attachments/assets/a3ca3973-f2c9-41a1-b707-5b9ddf774c9d" />  
 
 | Beat | Player does | What it teaches | How it is taught |
 |---|---|---|---|
