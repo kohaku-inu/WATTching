@@ -1,5 +1,5 @@
 using UnityEngine;
-using UnityEngine.InputSystem;   // the NEW Input System package
+using UnityEngine.InputSystem;
 
 // PHYSICS REQUIREMENTS COVERED HERE:
 //   1. CharacterController  (kinematic character - we move it ourselves, physics doesn't push it)
@@ -7,25 +7,26 @@ using UnityEngine.InputSystem;   // the NEW Input System package
 //
 // RequireComponent = Unity auto-adds a CharacterController when you add this script,
 // and refuses to let you remove it. Prevents the classic "NullReferenceException" from a missing component.
+//
+// Using built in class - character controller - for a precise game-y movement (other ways for movement: transform directly, rigidbody - get pushed)
 [RequireComponent(typeof(CharacterController))]
 public class PlayerController : MonoBehaviour
 {
-    // [SerializeField] private = "private to other scripts, but visible in the Inspector".
-    // Like a private field in Java that a config file can still set. Prefer it over 'public'.
+
     [SerializeField] private float walkSpeed = 1.8f;   // units/s. Design doc: ~90 px/s, with 1 unit = 50 px
     [SerializeField] private float pushForce = 40f;    // Newtons applied while touching a Rigidbody
     [SerializeField] private float gravity = -9.81f;
 
     private CharacterController controller;
-    private float verticalVelocity;   // CharacterController has NO gravity of its own - we add it
+    private float verticalVelocity;   // CharacterController has NO gravity of its own
 
     // INPUT SYSTEM: an InputAction = "a meaning" (Move) separated from "which keys" (bindings).
     // Gameplay code asks "what is Move's value?", never "is W pressed?". Rebinding later = no code change.
     private InputAction moveAction;
 
-    // C# PROPERTIES: a field with built-in getter/setter. Replaces Java's getX()/setX().
-    // "{ get; set; }" auto-generates a hidden backing field. "= true" is the initial value.
-    public bool CanMove { get; set; } = true;    // HoldAction sets false while you hold E
+    // C# PROPERTIES: a field with built-in getter/setter.
+    // "{ get; set; }" auto-generates a hidden backing field (in Java we create property and method for get&set ). "= true" is the initial value.
+    public bool CanMove { get; set; } = true;    // while player acts (hold E) HoldAction sets false
     public bool IsOnTask { get; set; }           // true = doing your job, so the telescreen ignores you
 
     // Awake runs once, before Start, when the object is created. Good place to cache components.
@@ -33,10 +34,9 @@ public class PlayerController : MonoBehaviour
     {
         controller = GetComponent<CharacterController>();
 
-        // A "Value" action of type Vector2: x = left/right, y = up/down.
         moveAction = new InputAction("Move", InputActionType.Value);
 
-        // "2DVector" composite = combine 4 buttons into one Vector2. It also normalizes diagonals.
+        // "2DVector" composite = combine 4 buttons into one Vector2. It also normalizes diagonals.  x = left/right, y = up/down.
         moveAction.AddCompositeBinding("2DVector")
             .With("Up", "<Keyboard>/w")
             .With("Down", "<Keyboard>/s")
@@ -52,6 +52,7 @@ public class PlayerController : MonoBehaviour
 
     // EDGE CASE: an InputAction does NOTHING until enabled. Forgetting Enable() = "my input reads 0".
     // OnEnable/OnDisable pair = it also stops listening when the player object is disabled or destroyed.
+    // => means is just "onEnable is just moveAction.Enable()"
     private void OnEnable()  => moveAction.Enable();
     private void OnDisable() => moveAction.Disable();
 
