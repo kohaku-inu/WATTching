@@ -12,7 +12,6 @@ using UnityEngine.InputSystem;
 [RequireComponent(typeof(CharacterController))]
 public class PlayerController : MonoBehaviour
 {
-
     [SerializeField] private float walkSpeed = 1.8f;   // units/s. Design doc: ~90 px/s, with 1 unit = 50 px
     [SerializeField] private float pushForce = 40f;    // Newtons applied while touching a Rigidbody
     [SerializeField] private float gravity = -9.81f;
