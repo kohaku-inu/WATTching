@@ -127,3 +127,46 @@ The code does use two of Unity's built-in static APIs:
 | Raycast | `TelescreenVision`: walls and the pillar block the telescreen's sight |
 | Collision | `NoisyObject.OnCollisionEnter`: `relativeVelocity` decides whether an impact is loud |
 | Joint | Archive door: `HingeJoint` with a spring and limits |
+
+## AI review  
+
+**Review of the code against the diagrams.** Every event declaration, every subscription and every cross-class call in `Assets/Scripts/` was listed by searching the code, then compared with the two diagrams above.
+
+| Finding | Result |
+|---|---|
+| All 7 events and their 12 subscriptions match the events diagram | ✔ No deviation |
+| Every `+=` in `OnEnable` has a matching `-=` in `OnDisable` | ✔ No deviation |
+| No game-logic script references a UI script | ✔ No deviation |
+| `TutorialFlow` switches off `SuspicionMeter` at the end of the level (`suspicion.enabled = false`) | ✘ Missing from the direct-references diagram. **Fixed:** edge added. The code was right: no reprimand should happen while the ending plays |
+| `Application.Quit` is a static Unity API in use | ✘ Missing from the static-state list. **Fixed:** added |
+
+**Deviations from the design docs** (`Docs/Level1_Tutorial_Design.md`):
+- **Lose condition:** the doc says the tutorial is never a game over; the course requires a working loss. `TutorialFlow.reprimandsBeforeArrest` (default 3) adds an arrest screen. Setting it to 0 restores the doc's rule.
+- Not implemented yet: the faint "next beam" preview, sound, the red notebook gaining saturation after the swap, and the optional epilogue. See the plan below.
+
+**Bugs found during AI-assisted development (all fixed):**
+- Pushing never worked: the "standing on it" check used `moveDirection.y`, which includes the gravity push, so every push was skipped. Now it uses the surface normal.
+- The door wouldn't turn: hinge limits defaulted to 0°–0°, and the door rubbed against both walls.
+- The cart wouldn't move: floor friction (~59 N) was stronger than the push (40 N). It now has a low-friction "wheels" Physics Material.
+- The desk zone sometimes stopped responding after a teleport: Unity can skip `OnTriggerEnter`. `OnTriggerStay` now re-detects the player.
+- The beam turned red while the player was working (visual only): red now means "raising suspicion", not just "sees".
+
+**Limit of this review:** it was done by the same AI that wrote the code, so it is not independent. **Plan:** before the final submission, run a second review in a fresh AI session that has seen only this README and `Assets/Scripts/`, and record its findings in the usage log.
+
+## Known limitations and bugs
+
+| # | Issue | Impact | Plan to fix |
+|---|---|---|---|
+| 1 | **"Esc to quit" does nothing in the browser.** Browsers ignore `Application.Quit` | The end screen shows a control that doesn't work on itch.io | Hide the Esc hint and skip the quit check when `Application.platform == RuntimePlatform.WebGLPlayer` |
+| 2 | **The sweep doesn't restart with the level.** `TelescreenSweep` uses `Time.time`, which counts from app start, not level start | After "play again" the beam starts at a different point in its swing | Use `Time.timeSinceLevelLoad`, which resets on every scene load (one-line change) |
+| 3 | **The drawn beam passes through walls.** Only the drawing: the Raycast is blocked correctly | The cone looks like it reaches into the archive, which is safe | Cast a fan of rays and build the cone from the hit points, so the drawn beam stops at walls |
+| 4 | **Detection uses one ray to the player's center** | A player half-hidden behind the pillar counts as fully hidden | Cast 2–3 rays (head, left and right shoulder); seen if any of them hits the player |
+| 5 | **A missing Inspector reference gives an unclear `NullReferenceException`** | Hard to debug when setting up a new scene | Add `OnValidate` checks that log which slot is empty, on which object |
+| 6 | **Physics values are hand-tuned, not play-tested** (push 40 N, wheel friction 0.05, door spring 2, clang at 1.5 m/s) | The cart may feel too light or too heavy; the clang may trigger too easily or too rarely | Play-test with 3–5 players, adjust in the Inspector (no code change needed) |
+| 7 | **Hold progress resets when E is released** | Letting go for a moment loses all progress | Open question in the design doc (§8). Decide after play-testing whether to keep or pause progress |
+| 8 | **No sound** (the telescreen hum, the archive's silence, the cart's clang) | Missing feedback the design relies on | `NoisyObject` already has an optional `AudioSource` slot. Add an audio pass next |
+| 9 | **Key bindings are set in code** | Players can't rebind keys | Move the bindings to an Input Actions asset; the scripts would read actions from it |
+| 10 | **No automated tests** | Regressions are found only by playing | Add Edit Mode tests for `SuspicionMeter` (fill/drain/reprimand) and `TutorialFlow` (step order, win/lose), which have no physics dependencies |
+
+**Not a bug, but easy to mistake for one:** in the Unity editor, keyboard input reaches the game only while the **Game view** has focus. Click inside it after using the Inspector or Console.
+
