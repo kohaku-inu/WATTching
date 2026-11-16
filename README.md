@@ -4,7 +4,7 @@
 
 This repository contains the **tutorial level**: one room, one telescreen, and the full core loop of *work as cover → wait → cross → sabotage → return*.
 
-▶ **Play in the browser:** [itch.io page](ITCH_LINK_HERE)  ·  **Design docs:** [`Docs/`](Docs/)
+▶ **Play in the browser:** [itch.io page](https://kohaku-inu.itch.io/wattching)  ·  **Design docs:** [`Docs/`](Docs/)
 
 ---
 
