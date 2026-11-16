@@ -12,12 +12,12 @@ using UnityEngine.InputSystem;
 [RequireComponent(typeof(CharacterController))]
 public class PlayerController : MonoBehaviour
 {
-    [SerializeField] private float walkSpeed = 1.8f;   // units/s. Design doc: ~90 px/s, with 1 unit = 50 px
-    [SerializeField] private float pushForce = 40f;    // Newtons applied while touching a Rigidbody
+    [SerializeField] private float walkSpeed = 1.8f; // units/s. Design doc: ~90 px/s, with 1 unit = 50 px
+    [SerializeField] private float pushForce = 40f; // Newtons applied while touching a Rigidbody
     [SerializeField] private float gravity = -9.81f;
 
     private CharacterController controller;
-    private float verticalVelocity;   // CharacterController has NO gravity of its own
+    private float verticalVelocity; // CharacterController has NO gravity of its own
 
     // INPUT SYSTEM: an InputAction = "a meaning" (Move) separated from "which keys" (bindings).
     // Gameplay code asks "what is Move's value?", never "is W pressed?". Rebinding later = no code change.
@@ -25,8 +25,8 @@ public class PlayerController : MonoBehaviour
 
     // C# PROPERTIES: a field with built-in getter/setter.
     // "{ get; set; }" auto-generates a hidden backing field (in Java we create property and method for get&set ). "= true" is the initial value.
-    public bool CanMove { get; set; } = true;    // while player acts (hold E) HoldAction sets false
-    public bool IsOnTask { get; set; }           // true = doing your job, so the telescreen ignores you
+    public bool CanMove { get; set; } = true; // while player acts (hold E) HoldAction sets false
+    public bool IsOnTask { get; set; } // true = doing your job, so the telescreen ignores you
 
     // Awake runs once, before Start, when the object is created. Good place to cache components.
     private void Awake()
@@ -46,13 +46,13 @@ public class PlayerController : MonoBehaviour
             .With("Down", "<Keyboard>/downArrow")
             .With("Left", "<Keyboard>/leftArrow")
             .With("Right", "<Keyboard>/rightArrow");
-        moveAction.AddBinding("<Gamepad>/leftStick");   // free gamepad support
+        moveAction.AddBinding("<Gamepad>/leftStick"); // free gamepad support
     }
 
     // EDGE CASE: an InputAction does NOTHING until enabled. Forgetting Enable() = "my input reads 0".
     // OnEnable/OnDisable pair = it also stops listening when the player object is disabled or destroyed.
     // => means is just "onEnable is just moveAction.Enable()"
-    private void OnEnable()  => moveAction.Enable();
+    private void OnEnable() => moveAction.Enable();
     private void OnDisable() => moveAction.Disable();
 
     // Update runs every rendered frame.
@@ -63,8 +63,10 @@ public class PlayerController : MonoBehaviour
         {
             // ReadValue<T> = generic method (like Java generics): "give me this action's value as a Vector2".
             Vector2 stick = moveAction.ReadValue<Vector2>();
+
             // Top-down: screen up/down (y) becomes world forward/back (z).
             input = new Vector3(stick.x, 0f, stick.y);
+
             // Safety net: keeps length <= 1 (a gamepad stick can report slightly over 1 diagonally).
             input = Vector3.ClampMagnitude(input, 1f);
         }
@@ -104,7 +106,7 @@ public class PlayerController : MonoBehaviour
         Vector3 pushDirection = new Vector3(hit.moveDirection.x, 0f, hit.moveDirection.z);
         if (pushDirection.sqrMagnitude < 0.0001f)
             return;
-        pushDirection.Normalize();   // length 1, so pushForce alone decides the strength
+        pushDirection.Normalize(); // length 1, so pushForce alone decides the strength
 
         // This is called every frame we keep touching it. An Impulse of (force * deltaTime) per frame
         // adds up to a steady "force" no matter the frame rate. (Plain ForceMode.Force from Update would
